@@ -5,8 +5,11 @@ format:
     revealjs:
         theme: beige
         fontsize: "35px"
----
 
+---
+<!-- Additional scripts --!>
+<script src="pointer.js"></script>
+<!-- End of additional scripts' block --!>
 
 ## The book
 We will base this introduction on the [Pro git](https://git-scm.com/book/en/v2) book
@@ -181,12 +184,25 @@ git commit --amend -m "Fixed 42 bugs"
 
 - branch
 ```bash
-git branch experiment
+git branch fancy_branch
 ```
 
-- checkout
+- checkout: [Switch branches or restore working tree files](https://git-scm.com/docs/git-checkout)
+```bash
+git checkout fancy_branch
+git checkout -b created_on_spot_branch
+git checkout c15e1e5 -- README.MD
+```
 
-- switch
+
+- The more recent `switch` and `restore` : branch and file functionalities in different commands 
+```bash
+git switch fancy_branch
+git switch -C created_on_spot_branch
+git restore README.MD
+git restore --staged README.MD # just to unstage
+git restore --source c15e1e5 README.MD # like checkout c15e1e5 -- README.MD
+```
 
 ---
 
@@ -212,6 +228,7 @@ git tag -a v1.4 -m "my version 1.4"
 
 ## Merging
 
+- [git-SCM book chapter about merging](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
 - Three way merging
 - meld
 - Taming Jupyter Notebooks: [nmdime](https://nbdime.readthedocs.io/en/latest/)

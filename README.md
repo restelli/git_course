@@ -7,7 +7,9 @@ Currently the main document is:
 
 ## How to run
 
-You need to install Quarto cli in your system.
+You need to install [Quarto cli](https://quarto.org/) in your system.
+
+
 Then all you need to do is to type:
 
 ```
