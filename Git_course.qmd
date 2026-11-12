@@ -299,6 +299,6 @@ git config --global mergetool.vscode.cmd 'code --wait --merge "$LOCAL" "$REMOTE"
     - Overleaf, for example, has a great [integration tool](https://docs.overleaf.com/integrations-and-add-ons/git-integration-and-github-synchronization/git-integration)
 ---
 
-## Thanks!
+## Thanks everyone!
 
 ---
