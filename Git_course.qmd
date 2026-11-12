@@ -4,15 +4,19 @@ author: "Alessandro Restelli"
 format:
     revealjs:
         theme: beige
-        fontsize: "35px"
+        fontsize: "25px"
+        embed-resources: true
+        width: 1280
+        height: 720
+        margin: 0.1
+include-in-header: header.html
 
 ---
-<!-- Additional scripts --!>
-<script src="pointer.js"></script>
-<!-- End of additional scripts' block --!>
 
 ## The book
-We will base this introduction on the [Pro git](https://git-scm.com/book/en/v2) book
+We will base this introduction on the [Pro git](https://git-scm.com/book/en/v2) book.
+
+There is also a convenient [cheat sheet](https://git-scm.com/cheat-sheet)
 
 - Brief history of git, concepts and use cases
 
@@ -27,7 +31,7 @@ We will base this introduction on the [Pro git](https://git-scm.com/book/en/v2) 
 - Staying away from (or getting into) trouble (rebase and reset)
 
 - Advanced topics
-There is also a convenient [cheat sheet](https://git-scm.com/cheat-sheet)
+
 
 ---
 
@@ -36,30 +40,31 @@ There is also a convenient [cheat sheet](https://git-scm.com/cheat-sheet)
 - [Apr 7, 2005]{style="font-size: 70%;"} [Git first commit](https://github.com/git/git/tree/e83c5163316f89bfbde7d9ab23ca2e25604af290) 
 [(with the [SHA1 order fix](https://github.com/git/git/commit/d98b46f) on Apr 20 2005)]{style="font-size: 70%;"}
 
+- [Today one million lines of code with]{style="font-size: 70%;"} [vulnerabilities](https://github.blog/open-source/git/git-security-vulnerabilities-announced-7/){style="font-size: 70%;"}
 
-:::: {.columns}
-::: {.column width="50%"}
-![source: claude ai](./figures/git_folder_structure_claude.svg){width="90%"}
+
+:::: {style="display: flex; justify-content: space-between; align-items: flex-start; gap: 2em;"}
+::: {style="width: 48%; text-align: center;"}
+![source: generated with claude ai](./figures/git_folder_structure_claude.svg){width="80%"}
 :::
-
-::: {.column width="50%"}
-![source: git book](./figures/states.png)
+::: {style="width: 48%; text-align: center;"}
+![source: git book](./figures/states.png){width="90%"}
 :::
-
 ::::
+
 <!-- ![Areas](./figures/areas.png){width="10%"} -->
 
 ::: {.notes}
 The biggest change from original git to current is the use of "changeset" instead of "commmit",
-also "Staging Area" was called "current directory cache", and it constist only in the index that is a list of files!
+also "Staging Area" was called "current directory cache", and it consist only in the index that is a list of files!
 
 blob — file content
 tree — directory listing (pointers to blobs and other trees)
 commit — snapshot in history (points to a tree + parent commit + metadata)
 index — not a git object at all, just a mutable working file
 
-in .git/HEAD there is a symbolic reference (or just the filename in detached head state) to the commit file, that otherwise has a long hash as a name
-
+in .git/HEAD there is a symbolic reference (or just the filename in detached head state) to the commit file,
+that otherwise has a long hash as a name
 :::
 
 ---
@@ -84,8 +89,8 @@ in .git/HEAD there is a symbolic reference (or just the filename in detached hea
 ## Setting up git
 
 ```bash
-git config --global user.name “[firstname lastname]”
-git config --global user.email “[valid-email]”
+git config --global user.name “[your-username-in_remote-repo]”
+git config --global user.email “[email-used-to-log-in-remote-repo]”
 git config --global color.ui auto
 ```
 The commands above pretty much explain themselves, but...
@@ -103,9 +108,14 @@ The commands above pretty much explain themselves, but...
 
 ## Setting up a repository
 
+### init and remote
+
+- `init` adds git tracking to your working directory
+- `remote` connects it to a remote server
+    - The server can be a simple `ssh` session hardened to run `git-shell` instead of `bash`
+    - One can register multiple remotes at once.
+
 ### log and status
-
-
 
 - status: it shows you your current snapshot
 ```bash
@@ -122,16 +132,14 @@ git log
 git reflog
 ```
 
-
-
-
-
 ---
 
 ## Adding / removing a file
 
 - Before `git add` a file is a new or modified file in [Working Directory]{style="color:red;"}
-- When you add it it is added to the [index (a.k.a staging area)]{style="color:blue;"}
+- With the `git add` command, it is added to the [index (a.k.a staging area)]{style="color:blue;"}
+
+a blob is also added to .git/objects
 
 ```bash
 git add <filename>
@@ -144,8 +152,8 @@ git add <filename>
 git rm --cached <filename>
 ```
 
-- Staged changes are not saved in the [.git directory]{style="background-color: yellow; color: black; padding: 2px;"}
-untill committed (more later) 
+- When committing a tree and a commit object are created in the [.git directory]{style="background-color: yellow; color: black; padding: 2px;"}
+and the head will now point to the newly created commit object.
 
 ---
 
@@ -157,6 +165,10 @@ untill committed (more later)
     - directories
 
 - [example](https://github.com/github/gitignore/blob/main/Python.gitignore)
+
+- Git is not too good with a lot of very large files. There are ways to mitigate this limitation.
+    - [git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) (available as git command)
+    - [git lfs](https://git-lfs.com/) (large file storage... an extension)
 
 ---
 
@@ -177,8 +189,6 @@ git commit --amend -m "Fixed 42 bugs"
 - Omitting `-m` option opens an editor for editing commits
 
 ---
-
-
 
 ## Branches
 
@@ -204,16 +214,6 @@ git restore --staged README.MD # just to unstage
 git restore --source c15e1e5 README.MD # like checkout c15e1e5 -- README.MD
 ```
 
----
-
-## Work with remote
-
-- push
-
-- pull
-
----
-
 ## Tags and Releases
 
 - tag
@@ -226,43 +226,79 @@ git tag -a v1.4 -m "my version 1.4"
 ---
 
 
+
+## Work with remote
+
+- push
+
+```
+push
+push --force-with-lease
+push --force
+```
+
+- pull
+    - fetch + merge
+    - ```pull --rebase``` (will explain later)
+
+---
+
+
+
 ## Merging
 
+- [Fast forward merge](https://git-scm.com/docs/git-merge.html#_fast_forward_merge):practically nothing gets truly merged!
 - [git-SCM book chapter about merging](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
-- Three way merging
-- meld
+- Three way merging (native in VSCode)
+```
+git config --global diff.tool vscode
+git config --global difftool.vscode.cmd 'code --wait --diff "$LOCAL" "$REMOTE"'
+git config --global difftool.prompt false
+git config --global merge.tool vscode
+git config --global mergetool.vscode.cmd 'code --wait --merge "$LOCAL" "$REMOTE" "$BASE" "$MERGED"'
+```
+- [Meld](https://meldmerge.org/), a great alternative
 - Taming Jupyter Notebooks: [nmdime](https://nbdime.readthedocs.io/en/latest/)
+- Merging tools are coming for [Kicad](https://forum.kicad.info/t/post-v10-new-features-and-development-news/66611/17)!
 
 ---
 
-## Fast forward merge
+## Advanced commands and rewriting history.
 
----
+- stash
 
-## stash
+    - [(push, pop, drop, clear)](https://git-scm.com/docs/git-stash)
 
----
+- rebase
+    - [rebase](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) 
+    - **Rebase only your commits: not other's commits**
+    - "squashing"
 
-## rebase
+- reset
+    - It works as "unstage" when files are passed and as "uncommit" when other hash or branch is passed.
+    - hard: everything is unstaged and replaced with the content of the reset commit
+    - default behavior: undoes commits and unstages but leaves edits there.
+    - soft: undoes the commits but leaves files unchanged in staging area
 
----
+        ```
+        git reset --soft HEAD~1 && git commit -"new message"
+        ```
+        is equivalent to
 
-## reset
+        ```
+        git amend -m "new message
+        ```
 
 ---
 
 ## How to move from here?
 
+- Embrace it when colaborating with someone that use it
+- Practice
+- Find your use cases.
+    - Overleaf, for example, has a great [integration tool](https://docs.overleaf.com/integrations-and-add-ons/git-integration-and-github-synchronization/git-integration)
 ---
 
 ## Thanks!
 
 ---
-
-
-
----
-
-## My Awesome Research Slide
-
-Here is a chart showing important data.
