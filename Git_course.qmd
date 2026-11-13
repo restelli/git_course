@@ -313,7 +313,3 @@ git config --global mergetool.vscode.cmd 'code --wait --merge "$LOCAL" "$REMOTE"
 
 ::::
 ---
-
-## Thanks everyone!
-
----
