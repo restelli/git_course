@@ -4,7 +4,7 @@ author: "Alessandro Restelli"
 format:
     revealjs:
         theme: beige
-        fontsize: "25px"
+        fontsize: "28px"
         embed-resources: true
         width: 1280
         height: 720
@@ -293,10 +293,25 @@ git config --global mergetool.vscode.cmd 'code --wait --merge "$LOCAL" "$REMOTE"
 
 ## How to move from here?
 
-- Embrace it when colaborating with someone that use it
+- Embrace it when collaborating with someone that use it
 - Practice
 - Find your use cases.
     - Overleaf, for example, has a great [integration tool](https://docs.overleaf.com/integrations-and-add-ons/git-integration-and-github-synchronization/git-integration)
+- Explore advanced functionalities!
+
+    ```
+    git cherry-pick
+    git subtree
+    git filter-repo
+    ```
+- [Get a gui do everything for you](https://github.com/apps/desktop)
+- LLMs make it trivial to figure out complex operations
+
+::::{style="text-align: center;"}
+
+# Thanks!
+
+::::
 ---
 
 ## Thanks everyone!
